@@ -1,0 +1,19 @@
+[Unit]
+Description=Mount NAS pool mergerfs
+Requires=mnt-nas-data1.mount mnt-nas-data2.mount
+After=mnt-nas-data1.mount mnt-nas-data2.mount
+Before=docker.service
+
+[Service]
+Type=simple
+KillMode=none
+ExecStart=/usr/bin/mergerfs \
+  -f \
+  -o allow_other,use_ino,cache.files=partial,dropcacheonclose=true,category.create=pfrd \
+  /mnt/nas/data* \
+  /mnt/nas/pool
+ExecStop=/bin/fusermount -uz /mnt/nas/pool
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

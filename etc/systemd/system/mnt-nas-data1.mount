@@ -1,0 +1,12 @@
+[Unit]
+Description=Mount NAS data1
+After=network.target
+
+[Mount]
+What=192.168.1.160:/volume1/data1
+Where=/mnt/nas/data1
+Type=nfs
+Options=_netdev,auto
+
+[Install]
+WantedBy=multi-user.target
