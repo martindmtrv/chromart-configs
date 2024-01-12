@@ -1,0 +1,13 @@
+[Unit]
+Description=libvirt wake on lan daemon
+After=network.target
+Wants=libvirtd.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/virtwold -interface %i -libvirturi qemu:///system
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=multi-user.target
