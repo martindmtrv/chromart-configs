@@ -18,3 +18,11 @@ virtwold is a daemon that listens on the network device `enp42s0` for WOL packet
 ## docker config json
 
 https://www.reddit.com/r/selfhosted/comments/1az6mqa/psa_adjust_your_docker_defaultaddresspool_size/
+
+## mount libvirtd virtual drives
+
+To extract data from the windows VM, instead of running a webserver inside the VM you can mount the .qcow2 file itself into linux using nbd.
+
+https://wiki.archlinux.org/title/QEMU#Mounting_a_partition_from_a_qcow2_image
+
+After mounting the drive into /mnt/windows, you can open the fileserver to serve it by editing the stack itself to include a windows directory.
