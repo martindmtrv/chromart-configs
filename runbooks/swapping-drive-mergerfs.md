@@ -40,6 +40,51 @@ sudo systemctl start mnt-mergerfs-pool.service
 
 Turn off chromart and shutdown the NAS. Physically remove the bad drive.
 
+You can hook it up to another PC with USB mount and perform a shred of this drive
+
+bash history for mounting the RAID drive, it had a weird format initially
+
+```
+udo mount /dev/sdc4 usbfront/
+sudo mount -t ext4 /dev/sdc4 usbfront/
+df
+mdadm --assemble --run /dev/md0 /dev/sdc4
+sudo mdadm --assemble --run /dev/md0 /dev/sdc4
+sudo umount /dev/sdc4
+df
+mdadm --assemble --run /dev/md0 /dev/sdc4
+sudo mdadm --assemble --run /dev/md0 /dev/sdc4
+cat /proc/mdstat
+ls /dev/md* | grep md126
+ls
+sudo mount /dev/md126 usbfront/
+cd usbfront/
+ls
+cd data1
+ls
+df
+cd ../
+ls
+cd ..
+ls
+sudo umount usbfront 
+df
+lsblk
+cat /proc/mdstat
+mdadm --stop /dev/mb125
+sudo mdadm --stop /dev/md125
+sudo mdadm --stop /dev/md126
+sudo mdadm --stop /dev/md127
+ls /dev/md*
+lsblk
+sudo mount -t ext4 /dev/sdc4 usbfront/
+
+```
+
+```
+sudo shred -v /dev/sdX
+```
+
 At this point you should do RMA to WD for warranty, or get a new drive.
 
 ## 4. Boot up the nas and reconfigure the bad volume
@@ -98,7 +143,7 @@ eg. after replacing we see this not balanced pool
 1:2                          5757408512 1735867136 4018362880  31% /mnt/nas/pool
 ```
 
-Start a tmux session and run the following, this will rebalance the pool.
+Start a tmux session and run the following, this will rebalance the pool. It may take a long time
 
 ```
 d-stopall
