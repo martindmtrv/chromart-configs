@@ -148,7 +148,7 @@ Start a tmux session and run the following, this will rebalance the pool. It may
 ```
 d-stopall
 
-sudo mergerfs.balance /mnt/nas/pool
+sudo mergerfs.balance /mnt/nas/pool -E */st-sync/* -s 1000
 ```
 
 https://github.com/trapexit/mergerfs-tools?tab=readme-ov-file#mergerfsbalance
