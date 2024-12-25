@@ -1,7 +1,11 @@
 [Unit]
 Description=Mount NAS pool mergerfs
-Requires=mnt-nas-data1.mount mnt-nas-data2.mount
-After=mnt-nas-data1.mount mnt-nas-data2.mount
+Requires=mnt-nas-data1.mount
+Requires=mnt-nas-data2.mount
+Requires=mnt-HDD.mount
+After=mnt-nas-data1.mount
+After=mnt-nas-data2.mount
+After=mnt-HDD.mount
 Before=docker.service
 
 [Service]

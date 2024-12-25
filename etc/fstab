@@ -1,0 +1,21 @@
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a device; this may
+# be used with UUID= as a more robust way to name devices that works even if
+# disks are added and removed. See fstab(5).
+#
+# <file system>             <mount point>  <type>  <options>  <dump>  <pass>
+UUID=CE0C-654C                              /efi       vfat    fmask=0137,dmask=0027   0 2 
+UUID=1ae81e5e-99be-4b93-b7ea-9c6b25ed35e5   /          ext4    noatime                 0 1 
+/swap					    swap       swap    defaults                0 0
+tmpfs                                       /tmp       tmpfs   noatime,mode=1777       0 0 
+UUID=92448f20-499f-4368-af52-ee8ffe6c2b8d   /mnt/HDD   ext4    defaults                0 0 
+UUID=89796447-1258-4816-8ccb-cd37e893dd71   /mnt/ssd   ext4    defaults                0 0 
+
+# pool drives
+UUID="b73f547d-7103-4811-8d63-bb13959455ca" /mnt/nas/drive1 ext4 defaults 0 0
+UUID="431ce84f-45e9-4c33-8224-e87eb8db8882" /mnt/nas/drive2 ext4 defaults 0 0
+
+# bind mounts, waits for the respective mounts before it can go
+/mnt/nas/drive1/data1 /mnt/nas/data1 none defaults,bind,nofail,x-systemd.requires-mounts-for=/mnt/nas/drive1
+/mnt/nas/drive2/data2 /mnt/nas/data2 none defaults,bind,nofail,x-systemd.requires-mounts-for=/mnt/nas/drive2

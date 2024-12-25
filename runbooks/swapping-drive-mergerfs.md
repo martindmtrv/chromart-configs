@@ -1,6 +1,6 @@
-# swapping drive in the NAS
+# swapping drive in the mergerfs pool
 
-If there is a bad drive, you need to swap it out. This can happen due to bad sectors or a defective drive.
+If there is a bad drive, you need to swap it out. This can happen due to bad sectors or a defective drive. This may come to our attention from Scrutiny notifications.
 
 ## One bad drive - not dead
 
@@ -28,9 +28,12 @@ If drive 2 is bad:
 # stop the mergerfs
 sudo systemctl stop mnt-mergerfs-pool.service
 
+# comment out the bad drive from /etc/fstab
+sudo vi /etc/fstab
+
 # remove bad drive mount
-sudo systemctl disable mnt-nas-data2.mount
-sudo systemctl stop mnt-nas-data2.mount
+sudo systemctl disable mnt-nas-drive2.mount
+sudo systemctl stop mnt-nas-drive2.mount
 
 # restart mergerfs
 sudo systemctl start mnt-mergerfs-pool.service
@@ -38,14 +41,14 @@ sudo systemctl start mnt-mergerfs-pool.service
 
 ## 3. Remove bad drive and install new one
 
-Turn off chromart and shutdown the NAS. Physically remove the bad drive.
+Turn off chromart PC. Physically remove the bad drive.
 
 You can hook it up to another PC with USB mount and perform a shred of this drive
 
 bash history for mounting the RAID drive, it had a weird format initially
 
 ```
-udo mount /dev/sdc4 usbfront/
+sudo mount /dev/sdc4 usbfront/
 sudo mount -t ext4 /dev/sdc4 usbfront/
 df
 mdadm --assemble --run /dev/md0 /dev/sdc4
@@ -87,27 +90,9 @@ sudo shred -v /dev/sdX
 
 At this point you should do RMA to WD for warranty, or get a new drive.
 
-## 4. Boot up the nas and reconfigure the bad volume
+## 4. Boot up the PC and reconfigure the bad volume
 
-Now with the new drive installed, the NAS will complain that the bad volume is inacessible. You have to go to 
-
-storage manager > volume > select volume > remove
-
-This will go through some prompts to confirm you are removing a volume. BE SURE YOU ARE REMOVING THE CORRECT ONE.
-
-Once this is done, you will have a blank volume.
-
-## 5. enable NFS
-
-Go to 
-
-access control > shared folders > add a new folder.
-
-Create the folder on the volume to replace the one that was removed.  Volume1 = data1, Volume2 = data2
-
-Go to access rights for this new folder > NFS priviledges.
-
-Add 192.168.1.150 with read and write access, and optionally wildcard access.
+Format the new disk and note its UUID. You should replace it in the /etc/fstab file
 
 ## 6. boot up chromart and re-enable service
 
@@ -121,8 +106,8 @@ d-stopall
 sudo systemctl stop mnt-mergerfs-pool.service
 
 # enable replaced drive mount
-sudo systemctl enable mnt-nas-data2.mount
-sudo systemctl start mnt-nas-data2.mount
+sudo systemctl enable mnt-nas-drive2.mount
+sudo systemctl start mnt-nas-drive2.mount
 
 # restart mergerfs
 sudo systemctl start mnt-mergerfs-pool.service
@@ -148,7 +133,7 @@ Start a tmux session and run the following, this will rebalance the pool. It may
 ```
 d-stopall
 
-sudo mergerfs.balance /mnt/nas/pool -E */st-sync/* -s 1000
+sudo mergerfs.balance /mnt/nas/pool -s 1000
 ```
 
 https://github.com/trapexit/mergerfs-tools?tab=readme-ov-file#mergerfsbalance
