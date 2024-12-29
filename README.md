@@ -19,6 +19,10 @@ TODO: remove me
 
 virtwold is a daemon that listens on the network device `enp42s0` for WOL packets from Moonlight to wake the windows VM. to start it `sudo systemctl enable virtwold-wol@enp42s0.service`
 
+wakeonlan-enable.service
+
+Runs ethtool on boot to ensure that the ethernet adapter sets wake on lan to enabled so we can boot the pc when it is off.
+
 ## docker config json
 
 https://www.reddit.com/r/selfhosted/comments/1az6mqa/psa_adjust_your_docker_defaultaddresspool_size/

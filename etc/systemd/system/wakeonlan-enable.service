@@ -1,0 +1,10 @@
+[Unit]
+Description=enable adapter wake on lan
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ethtool -s enp42s0 wol g
+
+[Install]
+WantedBy=multi-user.target
